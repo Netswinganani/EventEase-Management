@@ -1,0 +1,162 @@
+﻿@model EventEase_Management.Models.BookingModelView
+
+
+@{
+    ViewData["Title"] = "Edit Booking";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+            border: 1px solid #ced4da;
+        }
+
+            .form-control:focus {
+                border-color: #80bdff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+
+        .btn-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .btn-link:hover {
+                text-decoration: underline;
+            }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .row {
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h4>Edit Booking</h4>
+    <hr />
+
+    <div class="container">
+        <div class="row">
+            <!--Booking Form -->
+            <div class="col-md-6">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <!-- Hidden Field for BookingID -->
+                    <input type="hidden" asp-for="BookingID" />
+
+                    <!-- Customer Name -->
+                    <div class="form-group">
+                        <label asp-for="CustomerName" class="control-label"> Customer</label>
+                        <input asp-for="CustomerName" class="form-control" />
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+
+                    <!-- Event Selection -->
+                    <div class="form-group">
+                        <label asp-for="EventID" class="control-label">Event Name</label>
+                        <select asp-for="EventID" class="form-control" asp-items="ViewBag.EventId">
+                            <option value="">Select Event</option>
+                        </select>
+                        <span asp-validation-for="EventID" class="text-danger"></span>
+                    </div>
+
+                    <!-- Venue Selection -->
+                    <div class="form-group">
+                        <label asp-for="VenueId" class="control-label">Venue Name</label>
+                        <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueId">
+                            <option value="">Select Venue</option>
+                        </select>
+                        <span asp-validation-for="VenueId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Booking Date -->
+                    <div class="form-group">
+                        <label asp-for="BookingDate" class="control-label">Date</label>
+                        <input asp-for="BookingDate" class="form-control" type="date" />
+                        <span asp-validation-for="BookingDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- Status Selection -->
+                    <div class="form-group">
+                        <label asp-for="Status"> Status</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <img src="~/assets/img1.jpeg" alt="Event Image" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="back-button">
+        <a asp-action="BookDetails">Back</a>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+
+</body>
+</html>

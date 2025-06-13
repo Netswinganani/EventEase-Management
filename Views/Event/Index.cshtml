@@ -1,0 +1,240 @@
+﻿@model EventEase_Management.Models.EventModelView
+
+@{
+    ViewData["Title"] = "Add New Event";
+}
+@if (ViewData.ModelState["ImageFile"]?.Errors.Count > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState["ImageFile"]?.Errors)
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #dc3545; /* Red */
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #28a745; /* Green */
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding-left: 40px;
+            border: 1px solid #ccc;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 10px;
+            color: #fd7e14; /* Orange */
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .table-readonly {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        .form-icon-wrapper {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <h2>Add New Event</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="AddEvent" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Name -->
+                <div class="form-group">
+                    <i class="fas fa-heading input-icon"></i>
+                    <input asp-for="Name" class="form-control" placeholder="Enter event name" />
+                    <label asp-for="Name"></label>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <!-- Date -->
+                <div class="form-group">
+                    <i class="fas fa-calendar-alt input-icon"></i>
+                    <input asp-for="Date" type="date" class="form-control" />
+                    <label asp-for="Date"></label>
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <i class="fas fa-align-left input-icon"></i>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter event description"></textarea>
+                    <label asp-for="Description"></label>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <!-- Event $$Type -->
+                <div class="form-group">
+                    <i class="fas fa-tags input-icon"></i>
+                    <select asp-for="EventTypeID" class="form-control" asp-items="ViewBag.EventTypes">
+                        <option value="">Select Event Type</option>
+                    </select>
+                    <label asp-for="EventTypeID"></label>
+                    <span asp-validation-for="EventTypeID" class="text-danger"></span>
+                </div>
+                <!-- Status -->
+                <div class="form-group">
+                    <i class="fas fa-toggle-on input-icon"></i>
+                    <select asp-for="Status" class="form-control" asp-items="ViewBag.Statuses">
+                        <option value="">Select Event Status</option>
+                    </select>
+                    <label asp-for="Status"></label>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+                <!-- Venue -->
+                <div class="form-group">
+                    <i class="fas fa-map-marker-alt input-icon"></i>
+                    <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueId">
+                        <option value="">Select a Venue</option>
+                    </select>
+                    <label asp-for="VenueId"></label>
+                    <span asp-validation-for="VenueId" class="text-danger"></span>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="form-group">
+                    <i class="fas fa-image input-icon"></i>
+                    <input type="file" name="ImageFile" class="form-control" id="imageFileInput" />
+                    <label asp-for="ImageUrl">Event Image</label>
+                    <input asp-for="ImageUrl" class="form-control mt-2" placeholder="Or enter image URL" id="imageUrlInput" />
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create Event" class="btn btn-success btn-block" />
+                </div>
+            </form>
+        </div>
+
+        <!-- Read-only Example Table -->
+        <div class="col-md-6">
+            <h5 class="text-success text-center mb-3">Example Input Guide</h5>
+            <div class="table-responsive table-readonly">
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fas fa-heading text-orange"></i> Event Name</td>
+                            <td>Annual Tech Expo</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-calendar-alt text-orange"></i> Date</td>
+                            <td>2025-08-15</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-align-left text-orange"></i> Description</td>
+                            <td>Technology event featuring startups and panels.</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-toggle-on text-orange"></i> Status</td>
+                            <td>Upcoming</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-map-marker-alt text-orange"></i> Venue</td>
+                            <td>Hall A - Convention Center</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 text-center">
+        <a asp-action="ListEvent" class="btn btn-secondary">Back</a>
+    </div>
+
+    @section Scripts {
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+        <script>
+            document.getElementById("imageUrlInput").addEventListener("input", function () {
+                let imageUrl = this.value;
+                let imagePreview = document.getElementById("imagePreview");
+
+                if (imageUrl) {
+                    imagePreview.src = imageUrl;
+                    imagePreview.style.display = "block";
+                } else {
+                    imagePreview.style.display = "none";
+                }
+            });
+
+            document.getElementById("imageFileInput").addEventListener("change", function () {
+                let file = this.files[0];
+                let imagePreview = document.getElementById("imagePreview");
+
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = "block";
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = "none";
+                }
+            });
+        </script>
+    }
+</body>
+</html>

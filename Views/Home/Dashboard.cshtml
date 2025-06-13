@@ -1,0 +1,291 @@
+﻿@model EventEase_Management.Models.DashboardModelView
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <i class="fas fa-tachometer-alt icon-red"></i>
+        <h1 class="heading-red">EventEase Dashboard</h1>
+    </div>
+
+    <!-- Active Events -->
+    <div class="stat-grid">
+        <div class="stat-card highlight-orange">
+            <i class="fas fa-calendar-alt stat-icon icon-orange"></i>
+            <div>
+                <h3 class="heading-orange">Active Events</h3>
+                <p>@Model.ActiveEvents</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Available Venues + Upcoming Events -->
+    <div class="dashboard-row">
+        <div class="stat-card highlight-green">
+            <i class="fas fa-map-marker-alt stat-icon icon-green"></i>
+            <div>
+                <h3 class="heading-green">Available Venues</h3>
+                <p>@Model.AvailableVenues</p>
+            </div>
+        </div>
+
+        <div class="dashboard-panel">
+            <h2 class="heading-red"><i class="fas fa-calendar icon-red"></i> Upcoming Events</h2>
+            @if (Model.UpcomingEvents.Any())
+            {
+                <div class="table-scroll">
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Venue</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var eventItem in Model.UpcomingEvents)
+                            {
+                                <tr>
+                                    <td>@eventItem.Name</td>
+                                    <td>@eventItem.Venue.Name</td>
+                                    <td>@eventItem.Date.ToString("yyyy-MM-dd")</td>
+                                    <td><span class="status-badge @eventItem.Status.ToLower()">@eventItem.Status</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-calendar-times icon-red"></i>
+                    <p>No upcoming events</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Total Bookings + Recent Bookings -->
+    <div class="dashboard-row">
+        <div class="stat-card highlight-red">
+            <i class="fas fa-calendar-check stat-icon icon-red"></i>
+            <div>
+                <h3 class="heading-red">Total Bookings</h3>
+                <p>@Model.TotalBookings</p>
+            </div>
+        </div>
+
+        <div class="dashboard-panel">
+            <h2 class="heading-orange"><i class="fas fa-book icon-orange"></i> Recent Bookings</h2>
+            @if (Model.RecentBookings.Any())
+            {
+                <div class="table-scroll">
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Venue</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model.RecentBookings)
+                            {
+                                <tr>
+                                    <td>@booking.CustomerName</td>
+                                    <td>@booking.Venuess.Name</td>
+                                    <td>@booking.BookingDate.ToString("yyyy-MM-dd")</td>
+                                    <td><span class="status-badge @booking.Status.ToLower()">@booking.Status</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-book-dead icon-orange"></i>
+                    <p>No recent bookings</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Styles -->
+<style>
+    :root {
+        --red: #ff073a;
+        --green: #39ff14;
+        --orange: #f39c12;
+        --light: #1f1f1f;
+        --shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        --radius: 10px;
+    }
+
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f5f5f5;
+        color: #f1f1f1;
+    }
+
+    .dashboard-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    .dashboard-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        gap: 1rem;
+    }
+
+    .stat-grid,
+    .dashboard-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        transition: transform 0.3s ease;
+        flex: 1;
+        max-width: 300px;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #111;
+        }
+
+
+
+    .stat-icon {
+        font-size: 2rem;
+    }
+
+    .icon-red {
+        color: var(--red);
+    }
+
+    .icon-green {
+        color: var(--green);
+    }
+
+    .icon-orange {
+        color: var(--orange);
+    }
+
+    .heading-red {
+        color: var(--red);
+    }
+
+    .heading-green {
+        color: var(--green);
+    }
+
+    .heading-orange {
+        color: var(--orange);
+    }
+
+    .dashboard-panel {
+        background: white;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        flex: 3;
+    }
+
+        .dashboard-panel h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+    .dashboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #000;
+    }
+
+        .dashboard-table th,
+        .dashboard-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .dashboard-table tr:hover {
+            background: #f5f5f5;
+        }
+
+    .status-badge {
+        padding: 0.3rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+        .status-badge.confirmed {
+            background: rgba(46, 204, 113, 0.15);
+            color: var(--green);
+            text-shadow: 0 0 5px var(--green);
+        }
+
+        .status-badge.pending {
+            background: rgba(243, 156, 18, 0.15);
+            color: var(--orange);
+            text-shadow: 0 0 5px var(--orange);
+        }
+
+        .status-badge.cancelled {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--red);
+            text-shadow: 0 0 5px var(--red);
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #aaa;
+    }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+    .table-scroll {
+        overflow-x: auto;
+    }
+</style>
+
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

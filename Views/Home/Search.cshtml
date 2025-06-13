@@ -1,0 +1,129 @@
+﻿@model IEnumerable<EventEase_Management.Entity.Venue>
+
+@{
+    ViewData["Title"] = "Browse Venues";
+    var searchTerm = Context.Request.Query["searchTerm"];
+    var statusFilter = Context.Request.Query["statusFilter"];
+    var locationFilter = Context.Request.Query["locationFilter"];
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Browse Venues</h2>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger text-center">
+            <i class="fas fa-exclamation-triangle"></i> @ViewBag.ErrorMessage
+        </div>
+    }
+
+    <!-- Search & Filters -->
+    <form asp-action="Search" method="get" class="row g-3 mb-4 align-items-end">
+        <div class="col-md-4">
+            <label for="searchTerm" class="form-label">Search</label>
+            <input type="text" name="searchTerm" id="searchTerm" class="form-control"
+                   value="@searchTerm" placeholder="🔍 Search by name, location or description..." />
+        </div>
+
+        <!-- Status Filter Dropdown -->
+        <div class="col-md-3">
+            <label for="statusFilter" class="form-label">Status</label>
+            <select name="statusFilter" id="statusFilter" class="form-select">
+                @foreach (var status in ViewBag.StatusOptions as List<SelectListItem>)
+                {
+                    <option value="@status.Value" selected='@(status.Value == statusFilter ? "selected" : null)'>
+                        @status.Text
+                    </option>
+                }
+            </select>
+        </div>
+
+        <!-- Location Filter Dropdown -->
+        <div class="col-md-3">
+            <label for="locationFilter" class="form-label">Location</label>
+            <select name="locationFilter" id="locationFilter" class="form-select">
+                <option value="" selected='@(string.IsNullOrEmpty(locationFilter) ? "selected" : null)'>
+                    All Locations
+                </option>
+                @foreach (var loc in ViewBag.LocationOptions as List<SelectListItem>)
+                {
+                    <option value="@loc.Value" selected='@(loc.Value == locationFilter ? "selected" : null)'>
+                        @loc.Text
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="fas fa-exclamation-circle"></i> No venues match your criteria.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var venue in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@(!string.IsNullOrEmpty(venue.ImageUrl) ? venue.ImageUrl : "/images/default-venue.jpg")"
+                             class="card-img-top"
+                             alt="@venue.Name"
+                             style="height: 200px; object-fit: cover;" />
+
+                        <div class="card-body">
+                            <h5 class="card-title">@venue.Name</h5>
+                            <p class="card-text"><strong>Location:</strong> @venue.Location</p>
+                            <span class="badge @GetStatusBadgeClass(venue.Status) mb-2">@venue.Status</span>
+                            <p class="card-text">
+                                @venue.Description?.Substring(0, Math.Min(100, venue.Description.Length))...
+                            </p>
+                            
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@functions {
+    // Helper method for displaying status badge color based on status
+    public string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Available" => "bg-success",
+            "Booked" => "bg-danger",
+            "Maintenance" => "bg-warning text-dark",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+<!-- Optional: Style Enhancements -->
+<style>
+    .card-img-top {
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+        text-transform: capitalize;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .btn-outline-primary {
+        font-size: 0.875rem;
+    }
+</style>

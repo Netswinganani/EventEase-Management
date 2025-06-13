@@ -1,0 +1,262 @@
+﻿@model EventEase_Management.Entity.Venue
+
+@{
+    ViewData["Title"] = "Venue Details";
+}
+
+<div class="venue-detail-container">
+    <div class="venue-header">
+        <h2>@Model.Name</h2>
+        <div class="venue-actions">
+            <a asp-action="Edit" asp-route-id="@Model.VenueID" class="btn-edit">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a asp-action="Venuebook" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="venue-content">
+        <div class="venue-image">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid" onerror="this.src='https://via.placeholder.com/600x400?text=Venue+Image'">
+            }
+            else
+            {
+                <div class="no-image">
+                    <i class="fas fa-image"></i>
+                    <span>No image available</span>
+                </div>
+            }
+        </div>
+
+        <div class="venue-info">
+            <div class="info-item status-top">
+                <span class="info-label">Status</span>
+                <span class="info-value status-badge @Model.Status.ToLower()">@Model.Status</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label section-title">Description</span>
+                <p class="info-value">@Model.Description</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Location</span>
+                    <span class="info-value">@Model.Location</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Capacity</span>
+                    <span class="info-value">@Model.Capacity</span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label section-title">Image URL</span>
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <a href="@Model.ImageUrl" target="_blank" class="info-value url-link">@Model.ImageUrl</a>
+                }
+                else
+                {
+                    <span class="info-value">Not specified</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary: #c1121f;
+        --primary-light: #ffd5d5;
+        --success: #2a9d8f;
+        --neutral: #ffffff;
+        --gray: #6c757d;
+        --light-gray: #e9ecef;
+        --dark: #1d1d1d;
+        --border-radius: 8px;
+    }
+
+    body {
+        background-color: var(--light-gray);
+        color: var(--dark);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .venue-detail-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .venue-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+        .venue-header h2 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 0;
+            border-bottom: 3px solid var(--success);
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+
+    .venue-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-edit, .btn-back {
+        padding: 0.7rem 1.3rem;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+        background-color: var(--primary);
+        color: white;
+    }
+
+        .btn-edit:hover {
+            background-color: darkred;
+            box-shadow: 0 4px 12px rgba(193, 18, 31, 0.4);
+        }
+
+    .btn-back {
+        background-color: var(--neutral);
+        color: var(--primary);
+        border: 1px solid var(--primary);
+    }
+
+        .btn-back:hover {
+            background-color: var(--primary-light);
+        }
+
+    .venue-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        background-color: var(--neutral);
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        padding: 2rem;
+    }
+
+    .venue-image {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        height: 100%;
+        min-height: 300px;
+        background-color: var(--light-gray);
+    }
+
+        .venue-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+    .no-image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: var(--gray);
+    }
+
+        .no-image i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--light-gray);
+        }
+
+    .venue-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-item {
+        margin-bottom: 1.5rem;
+    }
+
+    .info-label {
+        display: block;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .section-title {
+        border-bottom: 2px solid var(--primary-light);
+        padding-bottom: 0.2rem;
+        margin-bottom: 0.6rem;
+        display: inline-block;
+    }
+
+    .info-value {
+        color: var(--dark);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        background-color: rgba(42, 157, 143, 0.15);
+        color: var(--success);
+    }
+
+        .status-badge.unavailable {
+            background-color: rgba(193, 18, 31, 0.1);
+            color: var(--primary);
+        }
+
+    .url-link {
+        color: var(--primary);
+        word-break: break-word;
+        text-decoration: underline;
+    }
+
+   
+        grid-template-columns: 1fr;
+    }
+
+    .venue-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />

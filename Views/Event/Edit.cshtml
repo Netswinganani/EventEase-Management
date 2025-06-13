@@ -1,0 +1,210 @@
+﻿@model EventEase_Management.Entity.Event
+@if (ViewData.ModelState["ImageFile"]?.Errors.Count > 0)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState["ImageFile"]?.Errors)
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 0.25rem;
+            border: 1px solid #ced4da;
+        }
+
+            .form-control:focus {
+                border-color: #80bdff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+
+        .btn-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .btn-link:hover {
+                text-decoration: underline;
+            }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .row {
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h4> Correct Your Event</h4>
+    <hr />
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-6">
+                <form asp-action="Edit" enctype="multipart/form-data">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="EventID" />
+
+                    <!--Event Section-->
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label">Event Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <!--Date Section-->
+                    <div class="form-group">
+                        <label asp-for="Date" class="control-label"> Date</label>
+                        <input asp-for="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <!--Description Section-->
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label">Description</label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <!-- Event Type -->
+                    <div class="form-group">
+                        <i class="fas fa-tags input-icon"></i>
+                        <select asp-for="EventTypeID" class="form-control" asp-items="ViewBag.EventTypes">
+                            <option value="">Select Event Type</option>
+                        </select>
+                        <label asp-for="EventTypeID"></label>
+                        <span asp-validation-for="EventTypeID" class="text-danger"></span>
+                    </div>
+
+                    <!--Status Section-->
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label"> Status</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Canceled">Canceled</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <!--Venue Section-->
+                    <div class="form-group">
+                        <label asp-for="VenueID" class="control-label"> Venue </label>
+                        <select asp-for="VenueID" class="form-control" asp-items="ViewBag.VenueId"></select>
+                        <span asp-validation-for="VenueID" class="text-danger"></span>
+                    </div>
+
+                    <!--image section-->
+                    <div class="mb-3">
+                        <label asp-for="ImageUrl" class="form-label fw-bold">Venue Image</label>
+                        <input type="file" name="ImageFile" class="form-control" id="imageFileInput" />
+                        <br />
+                        <input asp-for="ImageUrl" class="form-control" placeholder="Or enter image URL" id="imageUrlInput" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+
+
+                        <div class="mt-3">
+                            <img id="imagePreview" src="@Model.ImageUrl" alt="Venue Image" class="img-fluid rounded shadow" style="max-width: 300px; display: @(string.IsNullOrEmpty(Model.ImageUrl) ? "none" : "block");" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-md-6">
+                <img src="~/assets/img1.jpeg" alt="Event Image" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+
+    <div class="back-button">
+        <a asp-action="ListEvent">Back</a>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+        <script>
+            document.getElementById("imageUrlInput").addEventListener("input", function () {
+                let imageUrl = this.value;
+                let imagePreview = document.getElementById("imagePreview");
+
+                if (imageUrl) {
+                    imagePreview.src = imageUrl;
+                    imagePreview.style.display = "block";
+                } else {
+                    imagePreview.style.display = "none";
+                }
+            });
+
+            document.getElementById("imageFileInput").addEventListener("change", function () {
+                let file = this.files[0];
+                let imagePreview = document.getElementById("imagePreview");
+
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = "block";
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = "none";
+                }
+            });
+        </script>
+    }
+
+</body>
+</html>

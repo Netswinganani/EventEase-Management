@@ -1,0 +1,40 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+
+@if (Model?.ShowRequestId == true)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+@if (ViewData["ErrorMessage"] != null)
+{
+    <p>
+        <strong>Error Message:</strong> <code>@ViewData["ErrorMessage"]</code>
+    </p>
+}
+
+<!-- Only show development mode warning if in development -->
+@if (Context.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
+{
+    <h3>Development Mode</h3>
+    <p>
+        <strong>Detailed error information:</strong>
+        <div class="alert alert-danger">
+            @ViewData["ExceptionDetails"]
+        </div>
+    </p>
+}
+else
+{
+    <p>
+        <strong>Note:</strong> For development environment, you can enable detailed errors by setting
+        <strong>ASPNETCORE_ENVIRONMENT=Development</strong> in your environment variables.
+    </p>
+}

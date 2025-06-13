@@ -1,0 +1,101 @@
+﻿@model EventEase_Management.Entity.Event
+
+<div class="container mt-4">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h3 class="mb-0">Confirm Deletion</h3>
+        </div>
+        <div class="card-body">
+            <h4 class="card-title text-danger">Event Details</h4>
+            <hr class="border-danger" />
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="event-image-container mb-3">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" alt="Event Image" class="img-fluid rounded event-image">
+                        }
+                        else
+                        {
+                            <div class="no-image-placeholder bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px;">
+                                <span class="text-muted">No image available</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4 text-muted">Event Name:</dt>
+                        <dd class="col-sm-8 font-weight-bold">@Html.DisplayFor(model => model.Name)</dd>
+
+                        <dt class="col-sm-4 text-muted">Date:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Date)</dd>
+
+                        <dt class="col-sm-4 text-muted">Status:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge @(Model.Status == "Active" ? "badge-success" : "badge-secondary")">
+                                @Html.DisplayFor(model => model.Status)
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Venue:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Venue.Name)</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <dt class="text-muted">Description:</dt>
+                <dd class="p-3 bg-light rounded">@Html.DisplayFor(model => model.Description)</dd>
+            </div>
+
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <strong>Warning:</strong> This action cannot be undone. All associated data will be permanently deleted.
+            </div>
+
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="EventID" />
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger btn-lg mr-2">
+                        <i class="fas fa-trash-alt mr-2"></i>Confirm Delete
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .event-image {
+        max-height: 250px;
+        object-fit: cover;
+        width: 100%;
+        border: 1px solid #dee2e6;
+    }
+
+    .no-image-placeholder {
+        height: 200px;
+        border: 1px dashed #ccc;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    dt {
+        font-weight: 500;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-secondary {
+        background-color: #6c757d;
+    }
+</style>
