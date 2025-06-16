@@ -55,4 +55,4 @@ EventEase is a fully-featured cloud-hosted web application that allows users to 
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/your-username/eventease.git
+git clone https://github.com/Netswinganani/EventEase-Management.git
